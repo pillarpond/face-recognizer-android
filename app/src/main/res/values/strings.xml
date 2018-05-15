@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">face recognizer</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="enter_name">Enter name</string>
+    <string name="select_name">Select name</string>
+    <string name="ok">OK</string>
+
+    <string name="add_person">add person</string>
+    <string name="update_person">update person</string>
+</resources>
