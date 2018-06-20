@@ -129,12 +129,12 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
                             }
                         })
                         .show());
-
-        new Thread(this::init).start();
     }
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
+        new Thread(this::init).start();
+
         final float textSizePx =
         TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, getResources().getDisplayMetrics());
