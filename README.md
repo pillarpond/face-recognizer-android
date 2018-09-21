@@ -6,10 +6,10 @@ This sample demonstrates realtime face recognition on Android. The project is ba
 
 ## Inspiration
 The project is heavily inspired by
-* FaceNet[(Github)](https://github.com/davidsandberg/facenet)
-* MTCNN[(Github)](https://github.com/blaueck/tf-mtcnn)
-* Android LibSVM[(Github)](https://github.com/yctung/AndroidLibSVM)
-* Tensorflow Android Camera Demo[(Github)](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android)
+* [FaceNet](https://github.com/davidsandberg/facenet)
+* [MTCNN](https://github.com/blaueck/tf-mtcnn)
+* [Android LibSVM](https://github.com/yctung/AndroidLibSVM)
+* [Tensorflow Android Camera Demo](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android)
 
 ## Screenshots
 The code can recognize 5 famous people's faces.[(Source)](https://github.com/pillarpond/facerecognizer/blob/master/app/src/main/assets/label)  
@@ -20,3 +20,6 @@ Also, you can add new person using photos.
 
 ## Download
 [Google Drive](https://drive.google.com/file/d/1KlC3HsBkkME1kO8YPNUJqSWtqSd0eqeg/view?usp=sharing)
+
+## License
+[Apache License 2.0](./LICENSE)
