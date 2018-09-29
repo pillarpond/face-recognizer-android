@@ -1,6 +1,6 @@
 # Realtime Face Recognizer
 
-[![Build Status](https://travis-ci.org/pillarpond/facerecognizer.svg?branch=master)](https://travis-ci.org/pillarpond/facerecognizer)
+[![Build Status](https://travis-ci.org/pillarpond/face-recognizer-android.svg?branch=master)](https://travis-ci.org/pillarpond/face-recognizer-android)
 
 This sample demonstrates realtime face recognition on Android. The project is based on the [FaceNet](https://arxiv.org/abs/1503.03832).
 
