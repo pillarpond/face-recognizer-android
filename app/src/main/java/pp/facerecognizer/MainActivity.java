@@ -17,7 +17,6 @@
 package pp.facerecognizer;
 
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -31,28 +30,27 @@ import android.media.ImageReader.OnImageAvailableListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import pp.facerecognizer.env.BorderedText;
-import pp.facerecognizer.env.FileUtils;
-import pp.facerecognizer.env.ImageUtils;
-import pp.facerecognizer.env.Logger;
-import pp.facerecognizer.tracking.MultiBoxTracker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
+
+import androidx.appcompat.app.AlertDialog;
+import pp.facerecognizer.env.BorderedText;
+import pp.facerecognizer.env.FileUtils;
+import pp.facerecognizer.env.ImageUtils;
+import pp.facerecognizer.env.Logger;
+import pp.facerecognizer.tracking.MultiBoxTracker;
 
 /**
 * An activity that uses a TensorFlowMultiBoxDetector and ObjectTracker to detect and then track
@@ -133,7 +131,8 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
-        new Thread(this::init).start();
+        if (!initialized)
+            new Thread(this::init).start();
 
         final float textSizePx =
         TypedValue.applyDimension(
@@ -212,7 +211,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
     OverlayView trackingOverlay;
 
     void init() {
-        runOnUiThread(()->initSnackbar.show());
+        runOnUiThread(()-> initSnackbar.show());
         File dir = new File(FileUtils.ROOT);
 
         if (!dir.isDirectory()) {
@@ -232,7 +231,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
             finish();
         }
 
-        runOnUiThread(()->initSnackbar.dismiss());
+        runOnUiThread(()-> initSnackbar.dismiss());
         initialized = true;
     }
 

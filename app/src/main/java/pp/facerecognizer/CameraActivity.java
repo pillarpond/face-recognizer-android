@@ -32,14 +32,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Size;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import java.nio.ByteBuffer;
+
+import androidx.appcompat.app.AppCompatActivity;
 import pp.facerecognizer.env.ImageUtils;
 import pp.facerecognizer.env.Logger;
 
@@ -281,14 +283,11 @@ public abstract class CameraActivity extends AppCompatActivity
 
         CameraConnectionFragment camera2Fragment =
                 CameraConnectionFragment.newInstance(
-                        new CameraConnectionFragment.ConnectionCallback() {
-                            @Override
-                            public void onPreviewSizeChosen(final Size size, final int rotation) {
-                                previewHeight = size.getHeight();
-                                previewWidth = size.getWidth();
-                                CameraActivity.this.onPreviewSizeChosen(size, rotation);
-                            }
-                            },
+                        (size, rotation) -> {
+                            previewHeight = size.getHeight();
+                            previewWidth = size.getWidth();
+                            CameraActivity.this.onPreviewSizeChosen(size, rotation);
+                        },
                         this,
                         getLayoutId(),
                         getDesiredPreviewFrameSize());

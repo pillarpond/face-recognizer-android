@@ -13,8 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "time_log.h"
-
 #ifdef LOG_TIME
 // Storage for logging functionality.
 int num_time_logs = 0;

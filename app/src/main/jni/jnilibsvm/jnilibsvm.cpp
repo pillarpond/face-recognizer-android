@@ -4,8 +4,6 @@
 
 #include <jni.h>
 #include <string.h>
-#include <android/log.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>

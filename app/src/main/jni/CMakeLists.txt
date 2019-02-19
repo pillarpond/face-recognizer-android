@@ -17,48 +17,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
-get_filename_component(SRC_DIR  ${CMAKE_SOURCE_DIR}/..  ABSOLUTE)
+project(FACERECOGNIZER)
 
-
-project(TENSORFLOW_DEMO)
-
-if (ANDROID_ABI MATCHES "^armeabi-v7a$")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfloat-abi=softfp -mfpu=neon")
-elseif(ANDROID_ABI MATCHES "^arm64-v8a")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ftree-vectorize")
-endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSTANDALONE_DEMO_LIB \
-                    -std=c++11 -fno-exceptions -fno-rtti -O2 -Wno-narrowing \
-                    -fPIE")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} \
-                              -Wl,--allow-multiple-definition \
-                              -Wl,--whole-archive -fPIE -v")
-
-file(GLOB_RECURSE tensorflow_demo_sources ${SRC_DIR}/jni/tensorflow_demo/*.*)
-add_library(tensorflow_demo SHARED
-            ${tensorflow_demo_sources})
-target_include_directories(tensorflow_demo PRIVATE
-                           ${CMAKE_SOURCE_DIR})
-
-target_link_libraries(tensorflow_demo
-                      android
-                      log
-                      jnigraphics
-                      m
-                      atomic
-                      z)
-
-
-project(JNILIBSVM)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -frtti")
-
-file(GLOB_RECURSE jnilibsvm_sources ${SRC_DIR}/jni/jnilibsvm/*.*)
-add_library(jnilibsvm SHARED
-            ${jnilibsvm_sources})
-
-target_link_libraries(jnilibsvm
-                      android
-                      log
-                      dl)
+add_subdirectory(TENSORFLOW_DEMO)
+add_subdirectory(JNILIBSVM)
