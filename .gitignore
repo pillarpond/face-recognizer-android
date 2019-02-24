@@ -1,8 +1,14 @@
 *.iml
 .gradle
 /local.properties
+/.idea/caches
+/.idea/caches/build_file_checksums.ser
+/.idea/dictionaries
 /.idea/libraries
+/.idea/assetWizardSettings.xml
+/.idea/gradle.xml
 /.idea/modules.xml
+/.idea/tasks.xml
 /.idea/workspace.xml
 .DS_Store
 /build
