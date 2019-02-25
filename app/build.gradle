@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.annotation:annotation:1.0.1'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha03'
-    implementation 'androidx.annotation:annotation:1.0.1'
     implementation 'org.tensorflow:tensorflow-android:1.13.0-rc0'
 }

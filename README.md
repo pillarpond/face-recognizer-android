@@ -18,8 +18,11 @@ The code can recognize 5 famous people's faces.[(Source)](https://github.com/pil
 Also, you can add new person using photos.  
 ![demo2](./demo2.gif)
 
-## Download
-[Google Drive](https://drive.google.com/file/d/1KlC3HsBkkME1kO8YPNUJqSWtqSd0eqeg/view?usp=sharing)
+## Pre-trained model
+from davidsandberg's facenet
+| Model name      | LFW accuracy | Training dataset | Architecture |
+|-----------------|--------------|------------------|-------------|
+| [20180402-114759](https://drive.google.com/open?id=1EXPBSXwTaqrSC0OhUdXNmKSh9qJUQ55-) | 0.9965        | VGGFace2      | [Inception ResNet v1](https://github.com/davidsandberg/facenet/blob/master/src/models/inception_resnet_v1.py) |
 
 ## License
 [Apache License 2.0](./LICENSE)
