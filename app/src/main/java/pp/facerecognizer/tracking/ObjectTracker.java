@@ -23,9 +23,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 
-import pp.facerecognizer.env.Logger;
-import pp.facerecognizer.env.Size;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,6 +31,9 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import pp.facerecognizer.env.Logger;
+import pp.facerecognizer.env.Size;
 
 /**
  * True object detector/tracker class that tracks objects across consecutive preview frames.

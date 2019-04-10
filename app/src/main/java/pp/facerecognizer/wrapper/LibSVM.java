@@ -1,6 +1,5 @@
 package pp.facerecognizer.wrapper;
 
-import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -9,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.core.util.Pair;
 import pp.facerecognizer.Classifier;
 import pp.facerecognizer.env.FileUtils;
 

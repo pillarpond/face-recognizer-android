@@ -16,7 +16,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.os.Trace;
-import android.support.v4.util.Pair;
 
 import org.tensorflow.Graph;
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
@@ -24,6 +23,8 @@ import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import androidx.core.util.Pair;
 
 public class MTCNN {
     private static final String MODEL_FILE = "file:///android_asset/mtcnn.pb";

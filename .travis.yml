@@ -7,13 +7,13 @@ android:
   - tools
   - platform-tools
   - tools
-  - build-tools-27.0.3
-  - android-27
+  - build-tools-28.0.3
+  - android-28
   - extra-android-m2repository
   - extra-google-m2repository
 install:
   - echo y | sdkmanager "ndk-bundle"
-  - echo y | sdkmanager "cmake;3.6.4111459"
+  - echo y | sdkmanager "cmake;3.10.2.4988404"
   - echo y | sdkmanager "lldb;3.1"
     #  - sdkmanager --update
 before_script:

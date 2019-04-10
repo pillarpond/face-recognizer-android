@@ -20,26 +20,22 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.support.v4.util.Pair;
-import android.util.Log;
-import android.util.SparseArray;
-
-import pp.facerecognizer.env.FileUtils;
-import pp.facerecognizer.env.ImageUtils;
-import pp.facerecognizer.wrapper.FaceNet;
-import pp.facerecognizer.wrapper.LibSVM;
-import pp.facerecognizer.wrapper.MTCNN;
 
 import java.io.FileDescriptor;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import androidx.core.util.Pair;
+import pp.facerecognizer.env.FileUtils;
+import pp.facerecognizer.wrapper.FaceNet;
+import pp.facerecognizer.wrapper.LibSVM;
+import pp.facerecognizer.wrapper.MTCNN;
 
 /**
  * Generic interface for interacting with different recognition engines.
