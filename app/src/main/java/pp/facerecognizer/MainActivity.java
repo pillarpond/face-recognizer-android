@@ -41,7 +41,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -50,6 +49,7 @@ import pp.facerecognizer.env.BorderedText;
 import pp.facerecognizer.env.FileUtils;
 import pp.facerecognizer.env.ImageUtils;
 import pp.facerecognizer.env.Logger;
+import pp.facerecognizer.ml.BlazeFace;
 import pp.facerecognizer.tracking.MultiBoxTracker;
 
 /**
@@ -59,8 +59,8 @@ import pp.facerecognizer.tracking.MultiBoxTracker;
 public class MainActivity extends CameraActivity implements OnImageAvailableListener {
     private static final Logger LOGGER = new Logger();
 
-    private static final int FACE_SIZE = 160;
-    private static final int CROP_SIZE = 300;
+    private static final int CROP_HEIGHT = BlazeFace.INPUT_SIZE_HEIGHT;
+    private static final int CROP_WIDTH = BlazeFace.INPUT_SIZE_WIDTH;
 
     private static final Size DESIRED_PREVIEW_SIZE = new Size(640, 480);
 
@@ -69,7 +69,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
 
     private Integer sensorOrientation;
 
-    private Classifier classifier;
+    private Recognizer recognizer;
 
     private long lastProcessingTimeMs;
     private Bitmap rgbFrameBitmap = null;
@@ -101,8 +101,10 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
         super.onCreate(savedInstanceState);
 
         FrameLayout container = findViewById(R.id.container);
-        initSnackbar = Snackbar.make(container, "Initializing...", Snackbar.LENGTH_INDEFINITE);
-        trainSnackbar = Snackbar.make(container, "Training data...", Snackbar.LENGTH_INDEFINITE);
+        initSnackbar = Snackbar.make(
+                container, getString(R.string.initializing), Snackbar.LENGTH_INDEFINITE);
+        trainSnackbar = Snackbar.make(
+                container, getString(R.string.training), Snackbar.LENGTH_INDEFINITE);
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edittext, null);
         EditText editText = dialogView.findViewById(R.id.edit_text);
@@ -110,7 +112,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
                 .setTitle(R.string.enter_name)
                 .setView(dialogView)
                 .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                    int idx = classifier.addPerson(editText.getText().toString());
+                    int idx = recognizer.addPerson(editText.getText().toString());
                     performFileSearch(idx - 1);
                 })
                 .create();
@@ -119,7 +121,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
         button.setOnClickListener(view ->
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle(getString(R.string.select_name))
-                        .setItems(classifier.getClassNames(), (dialogInterface, i) -> {
+                        .setItems(recognizer.getClassNames(), (dialogInterface, i) -> {
                             if (i == 0) {
                                 editDialog.show();
                             } else {
@@ -132,7 +134,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
         if (!initialized)
-            new Thread(this::init).start();
+            init();
 
         final float textSizePx =
         TypedValue.applyDimension(
@@ -150,12 +152,12 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
 
         LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
         rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Config.ARGB_8888);
-        croppedBitmap = Bitmap.createBitmap(CROP_SIZE, CROP_SIZE, Config.ARGB_8888);
+        croppedBitmap = Bitmap.createBitmap(CROP_WIDTH, CROP_HEIGHT, Config.ARGB_8888);
 
         frameToCropTransform =
                 ImageUtils.getTransformationMatrix(
                         previewWidth, previewHeight,
-                        CROP_SIZE, CROP_SIZE,
+                        CROP_WIDTH, CROP_HEIGHT,
                         sensorOrientation, false);
 
         cropToFrameTransform = new Matrix();
@@ -191,13 +193,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
                             canvas.getHeight() - copy.getHeight() * scaleFactor);
                     canvas.drawBitmap(copy, matrix, new Paint());
 
-                    final Vector<String> lines = new Vector<String>();
-                    if (classifier != null) {
-                        final String statString = classifier.getStatString();
-                        final String[] statLines = statString.split("\n");
-                        Collections.addAll(lines, statLines);
-                    }
-                    lines.add("");
+                    final Vector<String> lines = new Vector<>();
                     lines.add("Frame: " + previewWidth + "x" + previewHeight);
                     lines.add("Crop: " + copy.getWidth() + "x" + copy.getHeight());
                     lines.add("View: " + canvas.getWidth() + "x" + canvas.getHeight());
@@ -211,28 +207,30 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
     OverlayView trackingOverlay;
 
     void init() {
-        runOnUiThread(()-> initSnackbar.show());
-        File dir = new File(FileUtils.ROOT);
+        runInBackground(() -> {
+            runOnUiThread(()-> initSnackbar.show());
+            File dir = new File(FileUtils.ROOT);
 
-        if (!dir.isDirectory()) {
-            if (dir.exists()) dir.delete();
-            dir.mkdirs();
+            if (!dir.isDirectory()) {
+                if (dir.exists()) dir.delete();
+                dir.mkdirs();
 
-            AssetManager mgr = getAssets();
-            FileUtils.copyAsset(mgr, FileUtils.DATA_FILE);
-            FileUtils.copyAsset(mgr, FileUtils.MODEL_FILE);
-            FileUtils.copyAsset(mgr, FileUtils.LABEL_FILE);
-        }
+                AssetManager mgr = getAssets();
+                FileUtils.copyAsset(mgr, FileUtils.DATA_FILE);
+                FileUtils.copyAsset(mgr, FileUtils.MODEL_FILE);
+                FileUtils.copyAsset(mgr, FileUtils.LABEL_FILE);
+            }
 
-        try {
-            classifier = Classifier.getInstance(getAssets(), FACE_SIZE, FACE_SIZE);
-        } catch (Exception e) {
-            LOGGER.e("Exception initializing classifier!", e);
-            finish();
-        }
+            try {
+                recognizer = Recognizer.getInstance(getAssets());
+            } catch (Exception e) {
+                LOGGER.e("Exception initializing classifier!", e);
+                finish();
+            }
 
-        runOnUiThread(()-> initSnackbar.dismiss());
-        initialized = true;
+            runOnUiThread(()-> initSnackbar.dismiss());
+            initialized = true;
+        });
     }
 
     @Override
@@ -278,8 +276,8 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
                     final long startTime = SystemClock.uptimeMillis();
 
                     cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-                    List<Classifier.Recognition> mappedRecognitions =
-                            classifier.recognizeImage(croppedBitmap,cropToFrameTransform);
+                    List<Recognizer.Recognition> mappedRecognitions =
+                            recognizer.recognizeImage(croppedBitmap,cropToFrameTransform);
 
                     lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
                     tracker.trackResults(mappedRecognitions, luminanceCopy, currTimestamp);
@@ -302,10 +300,12 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (!initialized) {
             Snackbar.make(
                     getWindow().getDecorView().findViewById(R.id.container),
-                    "Try it again later", Snackbar.LENGTH_SHORT)
+                    getString(R.string.try_it_later), Snackbar.LENGTH_SHORT)
                     .show();
             return;
         }
@@ -327,7 +327,7 @@ public class MainActivity extends CameraActivity implements OnImageAvailableList
 
             new Thread(() -> {
                 try {
-                    classifier.updateData(requestCode, getContentResolver(), uris);
+                    recognizer.updateData(requestCode, getContentResolver(), uris);
                 } catch (Exception e) {
                     LOGGER.e(e, "Exception!");
                 } finally {

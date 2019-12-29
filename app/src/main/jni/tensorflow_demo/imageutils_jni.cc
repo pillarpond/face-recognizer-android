@@ -22,6 +22,7 @@ limitations under the License.
 
 #include "rgb2yuv.h"
 #include "yuv2rgb.h"
+#include "prewhiten.h"
 
 #define IMAGEUTILS_METHOD(METHOD_NAME) \
   Java_pp_facerecognizer_env_ImageUtils_##METHOD_NAME  // NOLINT
@@ -53,6 +54,10 @@ JNIEXPORT void JNICALL
 IMAGEUTILS_METHOD(convertRGB565ToYUV420SP)(
     JNIEnv* env, jclass clazz, jbyteArray input, jbyteArray output,
     jint width, jint height);
+
+JNIEXPORT void JNICALL
+IMAGEUTILS_METHOD(prewhiten)(
+        JNIEnv* env, jclass clazz, jfloatArray input, jint length, jobject output);
 
 #ifdef __cplusplus
 }
@@ -160,4 +165,16 @@ IMAGEUTILS_METHOD(convertRGB565ToYUV420SP)(
 
   env->ReleaseByteArrayElements(input, i, JNI_ABORT);
   env->ReleaseByteArrayElements(output, o, 0);
+}
+
+JNIEXPORT void JNICALL
+IMAGEUTILS_METHOD(prewhiten)(
+        JNIEnv* env, jclass clazz, jfloatArray input, jint length, jobject output) {
+    jboolean inputCopy = JNI_FALSE;
+    jfloat* const i = env->GetFloatArrayElements(input, &inputCopy);
+    auto* const o = (jfloat*) env->GetDirectBufferAddress(output);
+
+    Prewhiten(i, length, o);
+
+    env->ReleaseFloatArrayElements(input, i, JNI_ABORT);
 }

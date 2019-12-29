@@ -20,7 +20,7 @@
 #define DEBUG_TAG "LibSVM-NDK"
 #define DEBUG_MACRO(x) __android_log_print(ANDROID_LOG_DEBUG, DEBUG_TAG, "NDK: %s", x);
 
-#define JNI_FUNC_NAME(name) Java_pp_facerecognizer_wrapper_LibSVM_ ## name
+#define JNI_FUNC_NAME(name) Java_pp_facerecognizer_ml_LibSVM_ ## name
 
 const int debug_message_max=1024;
 

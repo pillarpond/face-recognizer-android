@@ -33,7 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import pp.facerecognizer.Classifier.Recognition;
+import pp.facerecognizer.Recognizer.Recognition;
 import pp.facerecognizer.env.BorderedText;
 import pp.facerecognizer.env.ImageUtils;
 import pp.facerecognizer.env.Logger;

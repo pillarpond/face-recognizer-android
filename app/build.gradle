@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "pp.facerecognizer"
         minSdkVersion 25
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 29
+        versionCode 2
+        versionName "1.0.1"
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
     }
     buildTypes {
@@ -23,6 +23,9 @@ android {
             path 'src/main/jni/CMakeLists.txt'
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,8 +33,8 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.0.1'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
-    implementation 'org.tensorflow:tensorflow-android:1.13.0-rc0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
 }

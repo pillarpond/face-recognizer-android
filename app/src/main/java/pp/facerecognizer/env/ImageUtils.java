@@ -18,6 +18,8 @@ package pp.facerecognizer.env;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
+import java.nio.FloatBuffer;
+
 /**
  * Utility class for manipulating images.
  **/
@@ -307,4 +309,39 @@ public class ImageUtils {
 
         return matrix;
     }
+
+    public static void prewhiten(float[] input, FloatBuffer output) {
+        if (useNativeConversion) {
+            try {
+                ImageUtils.prewhiten(input, input.length, output);
+                return;
+            } catch (UnsatisfiedLinkError e) {
+                LOGGER.w(
+                        "Native prewhiten implementation not found, falling back to Java implementation");
+                useNativeConversion = false;
+            }
+        }
+
+        double sum = 0f;
+        for (float value : input) {
+            sum += value;
+        }
+        double mean = sum / input.length;
+        sum = 0f;
+
+        for (int i = 0; i < input.length; ++i) {
+            input[i] -= mean;
+            sum += Math.pow(input[i], 2);
+        }
+        double std = Math.sqrt(sum / input.length);
+        double std_adj = Math.max(std, 1.0 / Math.sqrt(input.length));
+
+        output.clear();
+        for (float value : input) {
+            output.put((float) (value / std_adj));
+        }
+        output.rewind();
+    }
+
+    private static native float prewhiten(float[] input, int length, FloatBuffer output);
 }

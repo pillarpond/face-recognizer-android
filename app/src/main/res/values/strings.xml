@@ -5,6 +5,7 @@
     <string name="select_name">Select name</string>
     <string name="ok">OK</string>
 
-    <string name="add_person">add person</string>
-    <string name="update_person">update person</string>
+    <string name="initializing">Initializing…</string>
+    <string name="training">Training data…</string>
+    <string name="try_it_later">Try it again later</string>
 </resources>
