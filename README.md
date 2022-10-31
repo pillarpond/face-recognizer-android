@@ -1,4 +1,5 @@
 # Realtime Face Recognizer
+Very Simple and usefull application
 
 [![Build Status](https://travis-ci.org/pillarpond/face-recognizer-android.svg?branch=master)](https://travis-ci.org/pillarpond/face-recognizer-android)
 
